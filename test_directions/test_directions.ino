@@ -161,7 +161,7 @@ void SmallStepMode()
   digitalWrite(dir_2, LOW); //Pull direction pin low to move "forward"
   digitalWrite(MS1_2, HIGH); //Pull MS1, and MS2 high to set logic to 1/8th microstep resolution
   digitalWrite(MS2_2, HIGH);
-  for(x= 1; x<1000; x++)  //Loop the forward stepping enough times for motion to be visible
+  for(x= 1; x<2000; x++)  //Loop the forward stepping enough times for motion to be visible
   {
     digitalWrite(stp_1,HIGH); //Trigger one step forward
     digitalWrite(stp_2,HIGH); //Trigger one step forward
