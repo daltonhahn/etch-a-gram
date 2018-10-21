@@ -4,7 +4,7 @@ import numpy as np
 # Takes a file and turns it into a 2-D array
 screen = [] # the 2-D array containing the file
 
-with open("./binary_output/square_output.txt", "r") as file: # open file
+with open("./binary_output/tree_out.txt", "r") as file: # open file
     for line in file: # loop through file lines
         readLine = []
         for c in line.strip(): # removes newline characters
