@@ -1,9 +1,9 @@
 import numpy as np
 
-comp_file = open("Compressed/twitter_compressed.txt", "w")
+comp_file = open("Compressed/plane_compressed.txt", "w")
 
 line_list = []
-with open("Out/twitter_out.txt", "r") as file:
+with open("Out/plane_out.txt", "r") as file:
     for line in file:
         line_list.append(line.split())
 
