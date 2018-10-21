@@ -1,23 +1,39 @@
-
-
-path_file = open("path.txt", "r")
+import numpy as np
 
 comp_file = open("compressed.txt", "w")
 
-comp_file.write("")
+line_list = []
+with open("path.txt", "r") as file:
+    for line in file:
+        line_list.append(line.split())
 
 
-cur_line = path_file.readline()
-for i in range(len(path_file)):
-    next_line = path_file.readline()
-    next_elems = next_line.split()
-    print(next_elems)
+lines_to_delete = []
+for i in range(len(line_list) - 1):
+        line1 = line_list[i]
+        line2 = line_list[i+1]
 
-    next_x = next_elems[0]
-    next_y = next_elems[1]
+        x1 = int(line1[0])
+        y1 = int(line1[1])
 
-    elems = cur_line.split()
-    print(elems)
-    x_val = elems[0]
-    y_val = elems[1]
+        x2= int(line2[0])
+        y2 = int(line2[1])
 
+        if(x1 == 0 and x2 == 0):
+            if((y1 > 0 and y2 > 0) or (y1 < 0 and y2 < 0)):
+                y2 = y2 + y1
+                lines_to_delete.append(i)
+                line_list[i+1][1] = y2
+        elif(y1 == 0 and y2 == 0):
+            if(np.sign(x1) == np.sign(x1)):
+                x2 = x2 + x1
+                lines_to_delete.append(i)
+                line_list[i+1][0] = x2
+
+for i in reversed(lines_to_delete):
+    del line_list[i]
+
+for i in line_list:
+    comp_file.write("takeSteps({}, {});\n".format(i[0], i[1]))
+
+comp_file.close()
