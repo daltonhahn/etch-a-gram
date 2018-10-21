@@ -27,7 +27,7 @@ def auto_canny(image, sigma=0.33):
 #
 
 
-image = cv2.imread("./figures/ksu.png") #import image
+image = cv2.imread("./figures/plane.png") #import image
 hsv = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
 # FROM: https://www.pyimagesearch.com/2015/04/06/zero-parameter-automatic-canny-edge-detection-with-python-and-opencv/
@@ -68,9 +68,9 @@ if((MAX_HEIGHT - resize_height) % 2 == 1):
 border = cv2.copyMakeBorder(resized_image, top=int(bordersize_top), bottom=int(bordersize_bottom), left=int(bordersize_left), right=int(bordersize_right),
         borderType= cv2.BORDER_CONSTANT, value=[255,255,255] )
 
-cv2.imwrite("./figures/ksu_out.png", border)
+cv2.imwrite("./figures/plane_out.png", border)
 
-outputfile = open("./binary_output/ksu_out.txt", "w")
+outputfile = open("./binary_output/plane_out.txt", "w")
 
 neg_img_data = np.asarray(border)
 for row in range(len(neg_img_data)):
