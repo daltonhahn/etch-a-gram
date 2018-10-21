@@ -2,52 +2,84 @@ import numpy as np
 import cv2 #this is the main openCV class, the python binding file should be in /pythonXX/Lib/site-packages
 from matplotlib import pyplot as plt
 
-gwash = cv2.imread("square.png") #import image
-hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-
-gwashBW = cv2.cvtColor(gwash, cv2.COLOR_BGR2GRAY) #change to grayscale
-
-
-plt.imshow(gwashBW, 'gray') #this is matplotlib solution (Figure 1)
-plt.xticks([]), plt.yticks([])
-plt.show()
-
-cv2.waitKey(0)
-
-ret,thresh1 = cv2.threshold(gwashBW,15,255,cv2.THRESH_BINARY) #the value of 15 is chosen by trial-and-error to produce the best outline of the skull
-kernel = np.ones((5,5),np.uint8) #square image kernel used for erosion
-erosion = cv2.erode(thresh1, kernel,iterations = 1) #refines all edges in the binary image
-
-opening = cv2.morphologyEx(erosion, cv2.MORPH_OPEN, kernel)
-closing = cv2.morphologyEx(opening, cv2.MORPH_CLOSE, kernel) #this is for further removing small noises and holes in the image
-
-plt.imshow(closing, 'gray') #Figure 2
-plt.xticks([]), plt.yticks([])
-plt.show()
-
-contours, hierarchy = cv2.findContours(closing,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE) #find contours with simple approximation
-
-cv2.imshow('cleaner', closing) #Figure 3
-cv2.drawContours(closing, contours, -1, (255, 255, 255), 4)
-cv2.waitKey(0)
+# THESE DIMENSIONS ARE TRUE DIMENSIONS - SMALLEST DESIRED BORDER SIZE
+MAX_HEIGHT = 2400
+MAX_WIDTH = 3600
+MIN_BORDERSIZE = 200
+# REMOVE ANY MENTION OF MIN_BORDERSIZE, IMPLEMENT THROUGH ARDUINO
 
 
 
-    _, frame = cap.read()
+#FROM: https://www.pyimagesearch.com/2015/04/06/zero-parameter-automatic-canny-edge-detection-with-python-and-opencv/
+def auto_canny(image, sigma=0.33):
+	# compute the median of the single channel pixel intensities
+	v = np.median(image)
 
-    lower_red = np.array([30,150,50])
-    upper_red = np.array([255,255,180])
+	# apply automatic Canny edge detection using the computed median
+	lower = int(max(0, (1.0 - sigma) * v))
+	upper = int(min(255, (1.0 + sigma) * v))
+	edged = cv2.Canny(image, lower, upper)
 
-    mask = cv2.inRange(hsv, lower_red, upper_red)
-    res = cv2.bitwise_and(frame,frame, mask= mask)
+	# return the edged image
+	return edged
 
-    cv2.imshow('Original',frame)
-    edges = cv2.Canny(frame,100,200)
-    cv2.imshow('Edges',edges)
+#
+#
+# IF TIME SCALE PHONE IMAGES DOWN THEN DO STUFF AND SCALE BACK UP
+#
 
-    k = cv2.waitKey(5) & 0xFF
-    if k == 27:
-        break
 
-cv2.destroyAllWindows()
-cap.release()
+image = cv2.imread("./figures/tree.png") #import image
+hsv = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+# FROM: https://www.pyimagesearch.com/2015/04/06/zero-parameter-automatic-canny-edge-detection-with-python-and-opencv/
+# load the image, convert it to grayscale, and blur it slightly
+blurred = cv2.GaussianBlur(hsv, (3, 3), 0)
+
+# apply Canny edge detection using a wide threshold, tight
+# threshold, and automatically determined threshold
+wide = cv2.Canny(blurred, 10, 200)
+tight = cv2.Canny(blurred, 225, 250)
+auto = auto_canny(blurred)
+
+
+
+
+imageneg = cv2.bitwise_not(auto)
+
+img_height,img_width= imageneg.shape
+scale_factor = min((MAX_HEIGHT)/img_height, (MAX_WIDTH)/img_width)
+
+resized_image = cv2.resize(imageneg, (0,0), fx=scale_factor, fy=scale_factor)
+resize_height, resize_width = resized_image.shape
+
+bordersize_top = ( ( MAX_HEIGHT - resize_height)/2 ) + MIN_BORDERSIZE
+bordersize_bottom = ( ( MAX_HEIGHT - resize_height)/2 ) + MIN_BORDERSIZE
+bordersize_right = ( ( MAX_WIDTH - resize_width ) /2 ) + MIN_BORDERSIZE
+bordersize_left = ( ( MAX_WIDTH - resize_width ) /2 ) + MIN_BORDERSIZE
+
+if((MAX_WIDTH - resize_width) % 2 == 1):
+    bordersize_right = ( (MAX_WIDTH - resize_width - 1)/2 ) + MIN_BORDERSIZE
+    bordersize_left = bordersize_right + 1
+
+if((MAX_HEIGHT - resize_height) % 2 == 1):
+    bordersize_bottom = ( (MAX_HEIGHT - resize_height - 1)/2 ) + MIN_BORDERSIZE
+    bordersize_top = bordersize_bottom + 1
+
+
+border = cv2.copyMakeBorder(resized_image, top=int(bordersize_top), bottom=int(bordersize_bottom), left=int(bordersize_left), right=int(bordersize_right),
+        borderType= cv2.BORDER_CONSTANT, value=[255,255,255] )
+
+cv2.imwrite("./figures/tree_out.png", border)
+
+outputfile = open("./binary_output/square_output.txt", "w")
+
+neg_img_data = np.asarray(border)
+for row in range(len(neg_img_data)):
+    for col in range(len(neg_img_data[0])):
+        pixel_val = neg_img_data[row][col]
+        if(pixel_val == 255):
+            outputfile.write("0")
+        else:
+            outputfile.write("1")
+    outputfile.write("\n")
