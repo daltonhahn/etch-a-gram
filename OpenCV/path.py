@@ -4,7 +4,7 @@ import numpy as np
 # Takes a file and turns it into a 2-D array
 screen = [] # the 2-D array containing the file
 
-with open("./binary_output/star_out.txt", "r") as file: # open file
+with open("./binary_output/diamond_out.txt", "r") as file: # open file
     for line in file: # loop through file lines
         readLine = []
         for c in line.strip(): # removes newline characters
@@ -43,12 +43,12 @@ for i in range(len(coordinates)):
     current_coord = next_coord # use to calculate where to go next
     coordinates = np.delete(coordinates, min_list_count, axis=0) # remove the step we took
 
-f = open("../draw/star_out.txt", "w")
+f = open("../draw/diamond_out.txt", "w")
 for i in range(len(path) - 1):
     step1 = path[i]
     step2 = path[i+1]
     x_dist = step2[1] - step1[1]
     y_dist = step2[0] - step1[0]
-    f.write("takeSteps({0},{1});\n".format(x_dist, y_dist))
+    f.write("{0} {1}\n".format(x_dist, y_dist))
 
 f.close()
