@@ -29,7 +29,7 @@ def auto_canny(image, sigma=0.33):
 #
 
 
-image = cv2.imread("./figures/tree.png") #import image
+image = cv2.imread("./figures/square.png") #import image
 hsv = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
 # FROM: https://www.pyimagesearch.com/2015/04/06/zero-parameter-automatic-canny-edge-detection-with-python-and-opencv/
@@ -70,7 +70,7 @@ if((MAX_HEIGHT - resize_height) % 2 == 1):
 border = cv2.copyMakeBorder(resized_image, top=int(bordersize_top), bottom=int(bordersize_bottom), left=int(bordersize_left), right=int(bordersize_right),
         borderType= cv2.BORDER_CONSTANT, value=[255,255,255] )
 
-cv2.imwrite("./figures/tree_out.png", border)
+cv2.imwrite("./figures/square_out.png", border)
 
 outputfile = open("./binary_output/square_output.txt", "w")
 
