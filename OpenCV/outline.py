@@ -5,8 +5,6 @@ from matplotlib import pyplot as plt
 # THESE DIMENSIONS ARE TRUE DIMENSIONS - SMALLEST DESIRED BORDER SIZE
 MAX_HEIGHT = 240
 MAX_WIDTH = 360
-MIN_BORDERSIZE = 20
-# REMOVE ANY MENTION OF MIN_BORDERSIZE, IMPLEMENT THROUGH ARDUINO
 
 
 
@@ -29,7 +27,7 @@ def auto_canny(image, sigma=0.33):
 #
 
 
-image = cv2.imread("./figures/square.png") #import image
+image = cv2.imread("./figures/plane.png") #import image
 hsv = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
 # FROM: https://www.pyimagesearch.com/2015/04/06/zero-parameter-automatic-canny-edge-detection-with-python-and-opencv/
@@ -53,26 +51,26 @@ scale_factor = min((MAX_HEIGHT)/img_height, (MAX_WIDTH)/img_width)
 resized_image = cv2.resize(imageneg, (0,0), fx=scale_factor, fy=scale_factor)
 resize_height, resize_width = resized_image.shape
 
-bordersize_top = ( ( MAX_HEIGHT - resize_height)/2 ) + MIN_BORDERSIZE
-bordersize_bottom = ( ( MAX_HEIGHT - resize_height)/2 ) + MIN_BORDERSIZE
-bordersize_right = ( ( MAX_WIDTH - resize_width ) /2 ) + MIN_BORDERSIZE
-bordersize_left = ( ( MAX_WIDTH - resize_width ) /2 ) + MIN_BORDERSIZE
+bordersize_top = ( ( MAX_HEIGHT - resize_height)/2 )
+bordersize_bottom = ( ( MAX_HEIGHT - resize_height)/2 )
+bordersize_right = ( ( MAX_WIDTH - resize_width ) /2 )
+bordersize_left = ( ( MAX_WIDTH - resize_width ) /2 )
 
 if((MAX_WIDTH - resize_width) % 2 == 1):
-    bordersize_right = ( (MAX_WIDTH - resize_width - 1)/2 ) + MIN_BORDERSIZE
+    bordersize_right = ( (MAX_WIDTH - resize_width - 1)/2 )
     bordersize_left = bordersize_right + 1
 
 if((MAX_HEIGHT - resize_height) % 2 == 1):
-    bordersize_bottom = ( (MAX_HEIGHT - resize_height - 1)/2 ) + MIN_BORDERSIZE
+    bordersize_bottom = ( (MAX_HEIGHT - resize_height - 1)/2 )
     bordersize_top = bordersize_bottom + 1
 
 
 border = cv2.copyMakeBorder(resized_image, top=int(bordersize_top), bottom=int(bordersize_bottom), left=int(bordersize_left), right=int(bordersize_right),
         borderType= cv2.BORDER_CONSTANT, value=[255,255,255] )
 
-cv2.imwrite("./figures/square_out.png", border)
+cv2.imwrite("./figures/plane_out.png", border)
 
-outputfile = open("./binary_output/square_output.txt", "w")
+outputfile = open("./binary_output/plane_out.txt", "w")
 
 neg_img_data = np.asarray(border)
 for row in range(len(neg_img_data)):
