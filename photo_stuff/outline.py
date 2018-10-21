@@ -3,9 +3,9 @@ import cv2 #this is the main openCV class, the python binding file should be in 
 from matplotlib import pyplot as plt
 
 # THESE DIMENSIONS ARE TRUE DIMENSIONS - SMALLEST DESIRED BORDER SIZE
-MAX_HEIGHT = 2400
-MAX_WIDTH = 3600
-MIN_BORDERSIZE = 200
+MAX_HEIGHT = 240
+MAX_WIDTH = 360
+MIN_BORDERSIZE = 20
 # REMOVE ANY MENTION OF MIN_BORDERSIZE, IMPLEMENT THROUGH ARDUINO
 
 
