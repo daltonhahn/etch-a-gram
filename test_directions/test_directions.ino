@@ -154,11 +154,11 @@ void ReverseStepDefault()
 void SmallStepMode()
 {
   Serial.println("Stepping at 1/8th microstep mode.");
-  digitalWrite(dir_1, LOW); //Pull direction pin low to move "forward"
+  digitalWrite(dir_1, HIGH); //Pull direction pin low to move "forward"
   digitalWrite(MS1_1, HIGH); //Pull MS1, and MS2 high to set logic to 1/8th microstep resolution
   digitalWrite(MS2_1, HIGH); 
    
-  digitalWrite(dir_2, LOW); //Pull direction pin low to move "forward"
+  digitalWrite(dir_2, HIGH); //Pull direction pin low to move "forward"
   digitalWrite(MS1_2, HIGH); //Pull MS1, and MS2 high to set logic to 1/8th microstep resolution
   digitalWrite(MS2_2, HIGH);
   for(x= 1; x<2000; x++)  //Loop the forward stepping enough times for motion to be visible
