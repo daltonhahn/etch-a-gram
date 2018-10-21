@@ -43,7 +43,7 @@ for i in range(len(coordinates)):
     current_coord = next_coord # use to calculate where to go next
     coordinates = np.delete(coordinates, min_list_count, axis=0) # remove the step we took
 
-f = open("path.txt", "w")
+f = open("../draw/path.txt", "w")
 for i in range(len(path) - 1):
     step1 = path[i]
     step2 = path[i+1]
