@@ -12,7 +12,7 @@
 #define MS2_left 12 // set high for 1/8 microstep revolution
 #define EN_left  13 // set low to allow motor control
 
-#define STEP_SIZE 15 // ratio of steps to pixels
+#define STEP_SIZE 20 // ratio of steps to pixels
 
 /* Coordinates (X,Y)
  * Upper left corner is (0,0)

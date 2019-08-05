@@ -43,7 +43,6 @@ void setup() {
   Serial.println("Enter an option: ");
   Serial.println("(0) Take first step");
   Serial.println("(1) Start drawing");
-  Serial.println("(2) Reset");
   Serial.println();
 
   resetEDPins(); //Set step, direction, microstep and enable pins to default states
